@@ -10,8 +10,8 @@
     <div align="center" class="board">
         {%- for i in range(22) -%}
             <div class="line">
-                {%- for i in range(12) -%}
-                    <div class="cube"></div>
+                {%- for j in range(12) -%}
+                    <div data-row="{{ i }}" data-col="{{ j }}" class="cube"></div>
                 {%- endfor -%}
             </div>
         {%- endfor -%}
