@@ -1,4 +1,5 @@
-function getBoard(rowCount, colCount){
+function getBoard(rowCount, colCount)
+{
     let board = [];
     for(let i=0; i<rowCount; i++)
     {
@@ -14,49 +15,59 @@ function getBoard(rowCount, colCount){
 
 function moveDown(board)
 {
+    // Sets up interval that moves elements in the JS matrix and the HTML every 300 milliseconds
     let myInterval = setInterval(
     function ()
     {
+        // Finds every moving element from HTML, then stores each one's coordinate in an array of objects
+        // with properties col and row
         let myElements = document.getElementsByClassName('cube moving');
         let coordinates = [];
-        for(let i = 0; i < myElements.length; i++) {
+        for(let i = 0; i < myElements.length; i++)
+        {
             let x = {col: Number(myElements[i].dataset.col),
                         row: Number(myElements[i].dataset.row)};
             coordinates.push(x);
-
-            // coordinates[i].col = Number(myElements[i].dataset.col);
-            // coordinates[i].row = Number(myElements[i].dataset.row);
         }
-        coordinates.reverse();
-        let condition = true;
-        for (coordinate of coordinates) {
+
+        // Get a condition that is true only if each moving element doesn't have a non moving element beneath it
+        let noNonMovingElementBeneathAnyElement = true;
+        for (coordinate of coordinates)
+        {
             if (board[coordinate.row + 1][coordinate.col] !== 0 &&
                 !(document.querySelector(`[data-row='${coordinate.row + 1}'][data-col='${coordinate.col}'].moving`))) {
-                condition = false;
+                noNonMovingElementBeneathAnyElement = false;
                 break;
             }
         }
-        if(Math.max(coordinates[0].col, coordinates[1].col, coordinates[2].col, coordinates[3].col) !== 21 && condition)
+        //Get a condition that is true if no moving element has hit bottom yet
+        let noElementReachedBottom = true;
+        for(coordinate of coordinates)
         {
-            // coordinates.sort(function (a, b) {
-            //     return b.row - a.row
-            // });
+            if (coordinate.row === 21)
+            {
+                noElementReachedBottom = false;
+                break;
+            }
+        }
+
+        if(noElementReachedBottom && noNonMovingElementBeneathAnyElement)
+        {
+            // Moves every element one step down if from the lowest element to the highest
+            // by moving them down in reverse order compared to their place in their list
             for (let i = 3; i >-1; i--) {
+                //Removing the element from the DOM
                 myElements[i].style.backgroundColor = '';
                 myElements[i].classList.remove('moving');
+                //Removing the element from the JS matrix
                 board[myElements[i].dataset.row][myElements[i].dataset.col] = 0;
+                //Puts the element one place down in the JS matrix
                 board[myElements[i].dataset.row+1][myElements[i].dataset.col] = {color: 'red'};
+                //Puts the element one place down in the DOM
                 let boardElement = document.querySelector(`[data-row='${myElements[i].dataset.row+1}'][data-col='${myElements[i].dataset.col}']`);
                 boardElement.style.backgroundColor = board[row+1][col].color;
                 boardElement.classList.add('moving');
             }
-            // myElements[0].style.backgroundColor='';
-            // myElements[0].classList.remove('moving');
-            // board[row][col] = 0;
-            // board[row+1][col] = {color: 'red'};
-            // let boardElement = document.querySelector(`[data-row='${row+1}'][data-col='${col}']`);
-            // boardElement.style.backgroundColor = board[row+1][col].color;
-            // boardElement.classList.add('moving');
         }
         else
         {
@@ -67,13 +78,14 @@ function moveDown(board)
 }
 
 
-
 function createMovingElement(board)
 {
+    // Creates a new moving element in JS matrix
     board[0][5] = {color: 'red'};
     board[1][5] = {color: 'red'};
     board[2][5] = {color: 'red'};
     board[3][5] = {color: 'red'};
+    // Places the moving elements into HTML
     let boardElements = [];
     for(let i = 0; i<4; i++){
         boardElements.push(document.querySelector(`[data-row="${i}"][data-col='5']`));
@@ -85,6 +97,8 @@ function createMovingElement(board)
 
 function fall(board)
 {
+    // Sets up an interval that checks if there's movement in the play area, and creates new moving element
+    // if there isn't any moving block
     let myInterval = setInterval(
         function ()
         {
@@ -96,7 +110,7 @@ function fall(board)
         }, 150);
 }
 
-//
+
 // function slide()
 // {
 //     if(row !== 21 && board[row+1][col] === 0)
@@ -193,10 +207,12 @@ function shifting(event, board)
 
 function main()
 {
+    // Initialize JS representation of the play area
     let row = 22;
     let col = 12;
     let board = getBoard(row, col);
 
+    // Making the page responsive to sideways key presses, then setting up the basic movement
     document.addEventListener('keydown', function() { shifting(event, board) });
     fall(board);
 
