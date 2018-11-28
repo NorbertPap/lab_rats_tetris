@@ -40,6 +40,7 @@ function moveDown(board)
 }
 
 
+
 function createMovingElement(board)
 {
     board[0][5] = {color: 'red'};
