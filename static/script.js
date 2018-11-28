@@ -13,12 +13,13 @@ function getBoard(rowCount, colCount)
 }
 
 
-function moveDown(board)
+function fallingMovement(board)
 {
     // Sets up interval that moves elements in the JS matrix and the HTML every 300 milliseconds
     let myInterval = setInterval(
     function ()
     {
+        createMovingElement(board);
         // Finds every moving element from HTML, then stores each one's coordinate in an array of objects
         // with properties col and row
         let myElements = document.getElementsByClassName('cube moving');
@@ -56,17 +57,20 @@ function moveDown(board)
             // Moves every element one step down if from the lowest element to the highest
             // by moving them down in reverse order compared to their place in their list
             for (let i = 3; i >-1; i--) {
-                //Removing the element from the DOM
+                //Puts the element one place down in the JS matrix
+                board[Number(myElements[i].dataset.row)+1][Number(myElements[i].dataset.col)] = {color: 'red'};
+
+                //Puts the element one place down in the DOM
+                let boardElement = document.querySelector(`[data-row='${Number(myElements[i].dataset.row)+1}'][data-col='${Number(myElements[i].dataset.col)}']`);
+                boardElement.style.backgroundColor = board[Number(myElements[i].dataset.row)+1][Number(myElements[i].dataset.col)].color;
+                boardElement.classList.add('moving');
+
+                //Removing the element from it's original position in the DOM
                 myElements[i].style.backgroundColor = '';
                 myElements[i].classList.remove('moving');
-                //Removing the element from the JS matrix
-                board[myElements[i].dataset.row][myElements[i].dataset.col] = 0;
-                //Puts the element one place down in the JS matrix
-                board[myElements[i].dataset.row+1][myElements[i].dataset.col] = {color: 'red'};
-                //Puts the element one place down in the DOM
-                let boardElement = document.querySelector(`[data-row='${myElements[i].dataset.row+1}'][data-col='${myElements[i].dataset.col}']`);
-                boardElement.style.backgroundColor = board[row+1][col].color;
-                boardElement.classList.add('moving');
+
+                //Removing the element from it's original position in the JS matrix
+                board[Number(myElements[i].dataset.row)][Number(myElements[i].dataset.col)] = 0;
             }
         }
         else
@@ -80,34 +84,22 @@ function moveDown(board)
 
 function createMovingElement(board)
 {
-    // Creates a new moving element in JS matrix
-    board[0][5] = {color: 'red'};
-    board[1][5] = {color: 'red'};
-    board[2][5] = {color: 'red'};
-    board[3][5] = {color: 'red'};
-    // Places the moving elements into HTML
-    let boardElements = [];
-    for(let i = 0; i<4; i++){
-        boardElements.push(document.querySelector(`[data-row="${i}"][data-col='5']`));
-        boardElements[i].style.backgroundColor = board[0][5].color;
-        boardElements[i].classList.add('moving');
+    // Checks if there's any moving element in the game currently
+    if(document.getElementsByClassName('cube moving').length === 0)
+    {
+        // Creates a new moving element in JS matrix
+        board[0][5] = {color: 'red'};
+        board[1][5] = {color: 'red'};
+        board[2][5] = {color: 'red'};
+        board[3][5] = {color: 'red'};
+        // Places the moving elements into HTML
+        let boardElements = [];
+        for (let i = 0; i < 4; i++) {
+            boardElements.push(document.querySelector(`[data-row="${i}"][data-col='5']`));
+            boardElements[i].style.backgroundColor = board[0][5].color;
+            boardElements[i].classList.add('moving');
+        }
     }
-}
-
-
-function fall(board)
-{
-    // Sets up an interval that checks if there's movement in the play area, and creates new moving element
-    // if there isn't any moving block
-    let myInterval = setInterval(
-        function ()
-        {
-            if(document.getElementsByClassName('cube moving').length === 0)
-            {
-                createMovingElement(board);
-                moveDown(board);
-            }
-        }, 150);
 }
 
 
@@ -214,7 +206,7 @@ function main()
 
     // Making the page responsive to sideways key presses, then setting up the basic movement
     document.addEventListener('keydown', function() { shifting(event, board) });
-    fall(board);
+    fallingMovement(board);
 
 
 }
