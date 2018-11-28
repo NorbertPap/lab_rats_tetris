@@ -15,11 +15,12 @@ function getBoard(rowCount, colCount)
 
 function fallingMovement(board)
 {
-    // Sets up interval that moves elements in the JS matrix and the HTML every 300 milliseconds
+    // Sets up interval that places elements in the play area if there are no moving elements yet,
+    // and moves them in the JS matrix and the HTML every 300 milliseconds
     let myInterval = setInterval(
     function ()
     {
-        createMovingElement(board);
+        board = createMovingElement(board);
         // Finds every moving element from HTML, then stores each one's coordinate in an array of objects
         // with properties col and row
         let myElements = document.getElementsByClassName('cube moving');
@@ -35,8 +36,8 @@ function fallingMovement(board)
         let noNonMovingElementBeneathAnyElement = true;
         for (coordinate of coordinates)
         {
-            if (board[coordinate.row + 1][coordinate.col] !== 0 &&
-                !(document.querySelector(`[data-row='${coordinate.row + 1}'][data-col='${coordinate.col}'].moving`))) {
+            if (coordinate.row === 21 || (board[coordinate.row + 1][coordinate.col] !== 0 &&
+                !(document.querySelector(`[data-row='${coordinate.row + 1}'][data-col='${coordinate.col}'].moving`)))) {
                 noNonMovingElementBeneathAnyElement = false;
                 break;
             }
@@ -54,30 +55,31 @@ function fallingMovement(board)
 
         if(noElementReachedBottom && noNonMovingElementBeneathAnyElement)
         {
-            // Moves every element one step down if from the lowest element to the highest
+            // Moves every element one step down from the lowest element to the highest
             // by moving them down in reverse order compared to their place in their list
             for (let i = 3; i >-1; i--) {
                 //Puts the element one place down in the JS matrix
                 board[Number(myElements[i].dataset.row)+1][Number(myElements[i].dataset.col)] = {color: 'red'};
+                //Removing the element from it's original position in the JS matrix
+                board[Number(myElements[i].dataset.row)][Number(myElements[i].dataset.col)] = 0;
 
                 //Puts the element one place down in the DOM
                 let boardElement = document.querySelector(`[data-row='${Number(myElements[i].dataset.row)+1}'][data-col='${Number(myElements[i].dataset.col)}']`);
                 boardElement.style.backgroundColor = board[Number(myElements[i].dataset.row)+1][Number(myElements[i].dataset.col)].color;
                 boardElement.classList.add('moving');
-
                 //Removing the element from it's original position in the DOM
                 myElements[i].style.backgroundColor = '';
                 myElements[i].classList.remove('moving');
-
-                //Removing the element from it's original position in the JS matrix
-                board[Number(myElements[i].dataset.row)][Number(myElements[i].dataset.col)] = 0;
             }
         }
         else
         {
-            clearInterval(myInterval);
-            document.getElementsByClassName('cube moving')[0].classList.remove('moving');
+            for(let i=0; i<myElements.length; i++)
+            {
+                myElements[i].classList.remove('moving');
+            }
         }
+        // }
     }, 300);
 }
 
@@ -100,6 +102,7 @@ function createMovingElement(board)
             boardElements[i].classList.add('moving');
         }
     }
+    return board;
 }
 
 
