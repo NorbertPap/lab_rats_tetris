@@ -13,19 +13,12 @@ function getBoard(rowCount, colCount){
 
 let board = getBoard(22, 12);
 
-let boardElements = document.getElementsByClassName('cube');
-
 board[0][5] = {color: 'red', id: 100};
 
-for(let i=0; i<boardElements.length; i++)
-{
-    if(boardElements[i].dataset.row === '0' && boardElements[i].dataset.col === '5')
-    {
-        boardElements[i].style.backgroundColor = board[0][5].color;
-        boardElements[i].classList.add('moving');
-        break;
-    }
-}
+
+let boardElement = document.querySelector("[data-row='0'][data-col='5']");
+boardElement.style.backgroundColor = board[0][5].color;
+boardElement.classList.add('moving');
 
 function moveDown()
 {
@@ -52,6 +45,10 @@ function moveDown()
                     break;
                 }
             }
+        }
+        else
+        {
+            clearInterval(myInterval);
         }
     }
 }
