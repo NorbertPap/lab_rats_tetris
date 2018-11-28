@@ -74,9 +74,9 @@ function fallingMovement(board)
         }
         else
         {
-            for(let i=0; i<myElements.length; i++)
+            while(myElements.length !== 0)
             {
-                myElements[i].classList.remove('moving');
+                myElements[0].classList.remove('moving');
             }
         }
         // }
