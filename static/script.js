@@ -111,21 +111,38 @@ function fallingMovement(board)
 }
 
 
-function createMovingElement(board)
-{
-    // Creates a new moving element in JS matrix
-    board[0][5] = {color: 'red'};
-    board[1][5] = {color: 'red'};
-    board[2][5] = {color: 'red'};
-    board[3][5] = {color: 'red'};
-    // Places the moving elements into HTML
-    let boardElements = [];
-    for (let i = 0; i < 4; i++) {
-        boardElements.push(document.querySelector(`[data-row="${i}"][data-col='5']`));
-        boardElements[i].style.backgroundColor = board[0][5].color;
-        boardElements[i].classList.add('moving');
+function createMovingElement(board) {
+    // function lineElement(board) {
+    //     // Creates a new moving element in JS matrix
+    //     board[0][5] = {color: 'red'};
+    //     board[1][5] = {color: 'red'};
+    //     board[2][5] = {color: 'red'};
+    //     board[3][5] = {color: 'red'};
+    //     // Places the moving elements into HTML
+    //     let boardElements = [];
+    //     for (let i = 0; i < 4; i++) {
+    //         boardElements.push(document.querySelector(`[data-row="${i}"][data-col='5']`));
+    //         boardElements[i].style.backgroundColor = board[0][5].color;
+    //         boardElements[i].classList.add('moving');
+    //     }
+    //     return board
+    // }
+    function cubeElement(board) {
+        board[0][5] = {color: 'red'};
+        board[1][5] = {color: 'red'};
+        board[0][6] = {color: 'red'};
+        board[1][6] = {color: 'red'};
+        let boardElements = [];
+        for (let i = 0; i < 4; i++) {
+            boardElements.push(document.querySelector(`[data-row="${i}"][data-col="5"]`));
+            boardElements.push(document.querySelector(`[data-row="${i}"][data-col="6"]`));
+            boardElements[i].style.backgroundColor = board[0][5].color;
+            boardElements[i].style.backgroundColor =board[0][6].color;
+            boardElements[i].classList.add('moving');
+        }
+        return board
     }
-    return board;
+    return cubeElement(board)
 }
 
 
