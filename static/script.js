@@ -129,18 +129,6 @@ function createMovingElement(board)
 }
 
 
-function noElementToTheSide(board, myElement, whichSide)
-{
-    switch(whichSide)
-    {
-        case 'left':
-            return board[Number(myElement.dataset.row)][Number(myElement.dataset.col)-1] === 0;
-        case 'right':
-            return board[Number(myElement.dataset.row)][Number(myElement.dataset.col)+1] === 0;
-    }
-}
-
-
 function shiftSideways(board, myElement, whichSide)
 {
     switch(whichSide)
