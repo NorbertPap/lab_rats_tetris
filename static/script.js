@@ -279,29 +279,40 @@ function moveLeft(board)
     let coordinates = getMovingElementCoordinates(myElements);
     // Sort coordinates by row, ascending
     coordinates.sort(function(a, b){
-        if (a.row < b.row)
+        if (a.col < b.col)
         {
             return -1;
         }
-        if (a.row > b.row)
+        if (a.col > b.col)
         {
             return 1;
         }
       return 0;
     });
 
+    noElementReachedTheSideYet = true;
+    noElementHasElementToTheSide = true;
     for(let i=0; i < coordinates.length; i++)
     {
         // Get the element with matching coordinates
         let myElement = document.querySelector(`[data-row="${coordinates[i].row}"][data-col="${coordinates[i].col}"]`);
         // Check if the element can be shifted to the left
         let didntReachTheSideYet = myElement.dataset.col !== "0";
-        let noElementToTheSide = board[Number(myElement.dataset.row)][Number(myElement.dataset.col)-1] === 0;
-        if (didntReachTheSideYet && noElementToTheSide)
+        let noElementToTheSide = board[Number(myElement.dataset.row)][Number(myElement.dataset.col)-1] === 0 || Boolean(document.querySelector(`[data-row="${coordinates[i].row}"][data-col="${coordinates[i].col-1}"].moving`));
+        //Checks for every element
+        noElementReachedTheSideYet = noElementReachedTheSideYet && didntReachTheSideYet;
+        noElementHasElementToTheSide = noElementHasElementToTheSide && noElementToTheSide;
+
+    }
+    if (noElementReachedTheSideYet && noElementHasElementToTheSide)
+    {
+        //Moves the current element one step to the left
+        for(let i=0; i < coordinates.length; i++)
         {
-            //Moves the current element one step to the left
+            let myElement = document.querySelector(`[data-row="${coordinates[i].row}"][data-col="${coordinates[i].col}"]`);
             shiftSideways(board, myElement, 'left');
         }
+
     }
 }
 
@@ -324,18 +335,29 @@ function moveRight(board)
     });
     coordinates.reverse();
 
+    noElementReachedTheSideYet = true;
+    noElementHasElementToTheSide = true;
     for(let i=0; i < coordinates.length; i++)
     {
         // Get the element with matching coordinates
         let myElement = document.querySelector(`[data-row="${coordinates[i].row}"][data-col="${coordinates[i].col}"]`);
-        // Check if the element can be shifted to the right
-        let didntReachTheSideYet = myElement.dataset.col !== "11";
-        let noElementToTheSide = board[Number(myElement.dataset.row)][Number(myElement.dataset.col)+1] === 0;
-        if (didntReachTheSideYet && noElementToTheSide)
+        // Check if the element can be shifted to the left
+        let didntReachTheSideYet = myElement.dataset.col !== "0";
+        let noElementToTheSide = board[Number(myElement.dataset.row)][Number(myElement.dataset.col)+1] === 0 || Boolean(document.querySelector(`[data-row="${coordinates[i].row}"][data-col="${coordinates[i].col+1}"].moving`));
+        //Checks for every element
+        noElementReachedTheSideYet = noElementReachedTheSideYet && didntReachTheSideYet;
+        noElementHasElementToTheSide = noElementHasElementToTheSide && noElementToTheSide;
+
+    }
+    if (noElementReachedTheSideYet && noElementHasElementToTheSide)
+    {
+        //Moves the current element one step to the left
+        for(let i=0; i < coordinates.length; i++)
         {
-            //Moves the current element one step to the right
+            let myElement = document.querySelector(`[data-row="${coordinates[i].row}"][data-col="${coordinates[i].col}"]`);
             shiftSideways(board, myElement, 'right');
         }
+
     }
 }
 
