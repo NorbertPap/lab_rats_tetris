@@ -20,65 +20,73 @@ function fallingMovement(board)
     let myInterval = setInterval(
     function ()
     {
-        board = createMovingElement(board);
-        // Finds every moving element from HTML, then stores each one's coordinate in an array of objects
-        // with properties col and row
-        let myElements = document.getElementsByClassName('cube moving');
-        let coordinates = [];
-        for(let i = 0; i < myElements.length; i++)
+        if(document.getElementsByClassName('cube moving').length === 0)
         {
-            let x = {col: Number(myElements[i].dataset.col),
-                        row: Number(myElements[i].dataset.row)};
-            coordinates.push(x);
-        }
-
-        // Get a condition that is true only if each moving element doesn't have a non moving element beneath it
-        let noNonMovingElementBeneathAnyElement = true;
-        for (coordinate of coordinates)
-        {
-            if (coordinate.row === 21 || (board[coordinate.row + 1][coordinate.col] !== 0 &&
-                !(document.querySelector(`[data-row='${coordinate.row + 1}'][data-col='${coordinate.col}'].moving`)))) {
-                noNonMovingElementBeneathAnyElement = false;
-                break;
-            }
-        }
-        //Get a condition that is true if no moving element has hit bottom yet
-        let noElementReachedBottom = true;
-        for(coordinate of coordinates)
-        {
-            if (coordinate.row === 21)
-            {
-                noElementReachedBottom = false;
-                break;
-            }
-        }
-
-        if(noElementReachedBottom && noNonMovingElementBeneathAnyElement)
-        {
-            // Moves every element one step down from the lowest element to the highest
-            // by moving them down in reverse order compared to their place in their list
-            for (let i = 3; i >-1; i--) {
-                //Puts the element one place down in the JS matrix
-                board[Number(myElements[i].dataset.row)+1][Number(myElements[i].dataset.col)] = {color: 'red'};
-                //Removing the element from it's original position in the JS matrix
-                board[Number(myElements[i].dataset.row)][Number(myElements[i].dataset.col)] = 0;
-
-                //Puts the element one place down in the DOM
-                let boardElement = document.querySelector(`[data-row='${Number(myElements[i].dataset.row)+1}'][data-col='${Number(myElements[i].dataset.col)}']`);
-                boardElement.style.backgroundColor = board[Number(myElements[i].dataset.row)+1][Number(myElements[i].dataset.col)].color;
-                boardElement.classList.add('moving');
-                //Removing the element from it's original position in the DOM
-                myElements[i].style.backgroundColor = '';
-                myElements[i].classList.remove('moving');
-            }
+            board = createMovingElement(board);
         }
         else
         {
-            while(myElements.length !== 0)
+            // Finds every moving element from HTML, then stores each one's coordinate in an array of objects
+            // with properties col and row
+            let myElements = document.getElementsByClassName('cube moving');
+            let coordinates = [];
+            for(let i = 0; i < myElements.length; i++)
             {
-                myElements[0].classList.remove('moving');
+                let x = {col: Number(myElements[i].dataset.col),
+                            row: Number(myElements[i].dataset.row)};
+                coordinates.push(x);
+            }
+
+            // Get a condition that is true only if each moving element doesn't have a non moving element beneath it
+            let noNonMovingElementBeneathAnyElement = true;
+            for (coordinate of coordinates)
+            {
+                if (coordinate.row === 21 || (board[coordinate.row + 1][coordinate.col] !== 0 &&
+                    !(document.querySelector(`[data-row='${coordinate.row + 1}'][data-col='${coordinate.col}'].moving`)))) {
+                    noNonMovingElementBeneathAnyElement = false;
+                    break;
+                }
+            }
+            //Get a condition that is true if no moving element has hit bottom yet
+            let noElementReachedBottom = true;
+            for(coordinate of coordinates)
+            {
+                if (coordinate.row === 21)
+                {
+                    noElementReachedBottom = false;
+                    break;
+                }
+            }
+
+            if(noElementReachedBottom && noNonMovingElementBeneathAnyElement)
+            {
+                // Moves every element one step down from the lowest element to the highest
+                // by moving them down in reverse order compared to their place in their list
+                for (let i = 3; i >-1; i--) {
+                    //Puts the element one place down in the JS matrix
+                    board[Number(myElements[i].dataset.row)+1][Number(myElements[i].dataset.col)] = {color: 'red'};
+                    //Removing the element from it's original position in the JS matrix
+                    board[Number(myElements[i].dataset.row)][Number(myElements[i].dataset.col)] = 0;
+
+                    //Puts the element one place down in the DOM
+                    let boardElement = document.querySelector(`[data-row='${Number(myElements[i].dataset.row)+1}'][data-col='${Number(myElements[i].dataset.col)}']`);
+                    boardElement.style.backgroundColor = board[Number(myElements[i].dataset.row)+1][Number(myElements[i].dataset.col)].color;
+                    boardElement.classList.add('moving');
+                    //Removing the element from it's original position in the DOM
+                    myElements[i].style.backgroundColor = '';
+                    myElements[i].classList.remove('moving');
+                }
+            }
+            else
+            {
+                while(myElements.length !== 0)
+                {
+                    myElements[0].classList.remove('moving');
+                }
             }
         }
+
+
         // }
     }, 300);
 }
@@ -86,46 +94,32 @@ function fallingMovement(board)
 
 function createMovingElement(board)
 {
-    // Checks if there's any moving element in the game currently
-    if(document.getElementsByClassName('cube moving').length === 0)
-    {
-        // Creates a new moving element in JS matrix
-        board[0][5] = {color: 'red'};
-        board[1][5] = {color: 'red'};
-        board[2][5] = {color: 'red'};
-        board[3][5] = {color: 'red'};
-        // Places the moving elements into HTML
-        let boardElements = [];
-        for (let i = 0; i < 4; i++) {
-            boardElements.push(document.querySelector(`[data-row="${i}"][data-col='5']`));
-            boardElements[i].style.backgroundColor = board[0][5].color;
-            boardElements[i].classList.add('moving');
-        }
+    // Creates a new moving element in JS matrix
+    board[0][5] = {color: 'red'};
+    board[1][5] = {color: 'red'};
+    board[2][5] = {color: 'red'};
+    board[3][5] = {color: 'red'};
+    // Places the moving elements into HTML
+    let boardElements = [];
+    for (let i = 0; i < 4; i++) {
+        boardElements.push(document.querySelector(`[data-row="${i}"][data-col='5']`));
+        boardElements[i].style.backgroundColor = board[0][5].color;
+        boardElements[i].classList.add('moving');
     }
     return board;
 }
 
 
-// function slide()
-// {
-//     if(row !== 21 && board[row+1][col] === 0)
-//             {
-//                 myElements[0].style.backgroundColor='';
-//                 myElements[0].classList.remove('moving');
-//                 board[row][col] = 0;
-//                 board[row+1][col] = {color: 'red'};
-//                 let boardElement = document.querySelector(`[data-row='${row+1}'][data-col='${col}']`);
-//                 boardElement.style.backgroundColor = board[row+1][col].color;
-//                 boardElement.classList.add('moving');
-//             }
-// }
-
-
 function changePosition(direction, board)
 {
     let myElements = document.getElementsByClassName('cube moving');
-    let col = Number(myElements[0].dataset.col);
-    let row = Number(myElements[0].dataset.row);
+    let coordinates = [];
+    for(let i = 0; i < myElements.length; i++)
+    {
+        let x = {col: Number(myElements[i].dataset.col),
+                    row: Number(myElements[i].dataset.row)};
+        coordinates.push(x);
+    }
 
     switch(direction)
     {
