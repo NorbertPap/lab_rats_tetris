@@ -21,7 +21,7 @@ function moveElementIfPossible(board, myElements, noElementReachedBottom, noNonM
         for (let i = 3; i > -1; i--)
         {
             //Puts the element one place down in the JS matrix
-            board[Number(myElements[i].dataset.row) + 1][Number(myElements[i].dataset.col)] = {color: 'red'};
+            board[Number(myElements[i].dataset.row) + 1][Number(myElements[i].dataset.col)] = {color: myElements[0]['style']['backgroundColor']};
             //Removing the element from it's original position in the JS matrix
             board[Number(myElements[i].dataset.row)][Number(myElements[i].dataset.col)] = 0;
 
@@ -100,6 +100,7 @@ function fallingMovement(board)
             clearInterval(myInterval);
             // Placeholder for actual action
             console.log('end');
+            return;
         }
         // Adds new moving element if there isn't any in the play area currently
         let myElements = document.getElementsByClassName('cube moving');
@@ -124,6 +125,8 @@ function fallingMovement(board)
 
 
 function createMovingElement(board) {
+    let colors = ["red", "blue", "deepskyblue", "orange", "yellow", "limegreen", "purple"]
+
     const lineElement = function lineElement(board) {
 
         // Creates a new moving element in JS matrix
@@ -158,20 +161,18 @@ function createMovingElement(board) {
     };
 
     const horizontalLine = function horizontalLine(board) {
+        board[0][4] = {color: 'red'};
         board[0][5] = {color: 'red'};
         board[0][6] = {color: 'red'};
         board[0][7] = {color: 'red'};
-        board[0][8] = {color: 'red'};
+
         let boardElements = [];
+        boardElements.push(document.querySelector(`[data-row="0"][data-col="4"]`));
+        boardElements.push(document.querySelector(`[data-row="0"][data-col="5"]`));
+        boardElements.push(document.querySelector(`[data-row="0"][data-col="6"]`));
+        boardElements.push(document.querySelector(`[data-row="0"][data-col="7"]`));
         for (let i = 0; i < 4; i++) {
-            boardElements.push(document.querySelector(`[data-row="${i}"][data-col="5"]`));
-            boardElements.push(document.querySelector(`[data-row="${i}"][data-col="6"]`));
-            boardElements.push(document.querySelector(`[data-row="${i}"][data-col="7"]`));
-            boardElements.push(document.querySelector(`[data-row="${i}"][data-col="8"]`));
             boardElements[i].style.backgroundColor = board[0][5].color;
-            boardElements[i].style.backgroundColor = board[0][6].color;
-            boardElements[i].style.backgroundColor = board[0][7].color;
-            boardElements[i].style.backgroundColor = board[0][8].color;
             boardElements[i].classList.add('moving');
         }
         return board;
@@ -327,7 +328,7 @@ function moveDown(board)
         for (let i = 3; i > -1; i--)
         {
             //Puts the element one place down in the JS matrix
-            board[Number(myElements[i].dataset.row) + 1][Number(myElements[i].dataset.col)] = {color: 'red'};
+            board[Number(myElements[i].dataset.row) + 1][Number(myElements[i].dataset.col)] = {color: myElements[0]['style']['backgroundColor']};
             //Removing the element from it's original position in the JS matrix
             board[Number(myElements[i].dataset.row)][Number(myElements[i].dataset.col)] = 0;
 
@@ -487,15 +488,20 @@ function shifting(event, board)
 
 function checkColumnFill(board)
 {
-    let topRowElements = document.querySelectorAll('[data-row="0"][style="background-color: red;"]');
-    for(element of topRowElements)
+    let colors = ["red", "blue", "deepskyblue", "orange", "yellow", "limegreen", "purple"];
+    let topRowElements = null;
+    for(color of colors)
     {
-        if(!element.classList.contains('moving'))
+        topRowElements = document.querySelectorAll(`[data-row="0"][style="background-color: ${color};"]`);
+        for(element of topRowElements)
         {
-            return true;
+            if(!element.classList.contains('moving'))
+            {
+                return true;
+            }
         }
-
     }
+
 }
 
 
