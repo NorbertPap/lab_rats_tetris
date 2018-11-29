@@ -342,7 +342,7 @@ function moveRight(board)
         // Get the element with matching coordinates
         let myElement = document.querySelector(`[data-row="${coordinates[i].row}"][data-col="${coordinates[i].col}"]`);
         // Check if the element can be shifted to the left
-        let didntReachTheSideYet = myElement.dataset.col !== "0";
+        let didntReachTheSideYet = myElement.dataset.col !== "11";
         let noElementToTheSide = board[Number(myElement.dataset.row)][Number(myElement.dataset.col)+1] === 0 || Boolean(document.querySelector(`[data-row="${coordinates[i].row}"][data-col="${coordinates[i].col+1}"].moving`));
         //Checks for every element
         noElementReachedTheSideYet = noElementReachedTheSideYet && didntReachTheSideYet;
