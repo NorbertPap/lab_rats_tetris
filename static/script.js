@@ -73,7 +73,7 @@ function checkIfAbovePreviousElement(board, coordinates)
 }
 
 
-function getMovingElementsFromHTML(myElements)
+function getMovingElementCoordinates(myElements)
 {
 // Finds every moving element from HTML, then stores each one's coordinate in an array of objects
     // with properties col and row
@@ -102,7 +102,7 @@ function fallingMovement(board)
         }
         else
         {
-            let coordinates = getMovingElementsFromHTML(myElements);
+            let coordinates = getMovingElementCoordinates(myElements);
             let noNonMovingElementBeneathAnyElement = checkIfAbovePreviousElement(board, coordinates);
             let noElementReachedBottom = checkIfBottomReached(board, coordinates);
             moveElementIfPossible(board, myElements, noElementReachedBottom, noNonMovingElementBeneathAnyElement);
@@ -129,54 +129,178 @@ function createMovingElement(board)
 }
 
 
-function changePosition(direction, board)
+function didntReachTheSideYet(myElement, whichSide)
+{
+    console.log(myElement);
+    switch(whichSide)
+    {
+        case 'left':
+            return  myElement.data.col === "0";
+        case 'right':
+            return myElement.data.col === "11";
+    }
+}
+
+
+function noElementToTheSide(board, myElement, whichSide)
+{
+    switch(whichSide)
+    {
+        case 'left':
+            return board[Number(myElement.dataset.row)][Number(myElement.dataset.col)-1] === 0;
+        case 'right':
+            return board[Number(myElement.dataset.row)][Number(myElement.dataset.col)+1] === 0;
+    }
+}
+
+
+function shiftSideways(board, myElement, whichSide)
+{
+    switch(whichSide)
+    {
+        case 'left': {
+            //Puts the element one place left in the JS matrix
+            board[Number(myElement.dataset.row)][Number(myElement.dataset.col) - 1] = {color: myElement['style']['backgroundColor']};
+            //Removing the element from it's original position in the JS matrix
+            board[Number(myElement.dataset.row)][Number(myElement.dataset.col)] = 0;
+            //Puts the element one place left in the DOM
+            let boardElement = document.querySelector(`[data-row='${Number(myElement.dataset.row)}'][data-col='${Number(myElement.dataset.col) - 1}']`);
+            boardElement.style.backgroundColor = board[Number(myElement.dataset.row)][Number(myElement.dataset.col) - 1].color;
+            boardElement.classList.add('moving');
+            //Removing the element from it's original position in the DOM
+            myElement.style.backgroundColor = '';
+            myElement.classList.remove('moving');
+            break;
+        }
+        case 'right': {
+            //Puts the element one place right in the JS matrix
+            board[Number(myElement.dataset.row)][Number(myElement.dataset.col) + 1] = {color: myElement['style']['backgroundColor']};
+            //Removing the element from it's original position in the JS matrix
+            board[Number(myElement.dataset.row)][Number(myElement.dataset.col)] = 0;
+            //Puts the element one place right in the DOM
+            let boardElement = document.querySelector(`[data-row='${Number(myElement.dataset.row)}'][data-col='${Number(myElement.dataset.col) + 1}']`);
+            boardElement.style.backgroundColor = board[Number(myElement.dataset.row)][Number(myElement.dataset.col) + 1].color;
+            boardElement.classList.add('moving');
+            //Removing the element from it's original position in the DOM
+            myElement.style.backgroundColor = '';
+            myElement.classList.remove('moving');
+        }
+
+    }
+}
+
+
+function moveDown(board)
 {
     let myElements = document.getElementsByClassName('cube moving');
-    let coordinates = [];
-    for(let i = 0; i < myElements.length; i++)
+    let noElementReachedBottom = checkIfBottomReached(board, getMovingElementCoordinates(myElements));
+    let noNonMovingElementBeneathAnyElement = checkIfAbovePreviousElement(board, getMovingElementCoordinates(myElements));
+    if(noElementReachedBottom && noNonMovingElementBeneathAnyElement)
     {
-        let x = {col: Number(myElements[i].dataset.col),
-                    row: Number(myElements[i].dataset.row)};
-        coordinates.push(x);
-    }
+        // Moves every element one step down from the lowest element to the highest
+        // by moving them down in reverse order compared to their place in their list
+        for (let i = 3; i > -1; i--)
+        {
+            //Puts the element one place down in the JS matrix
+            board[Number(myElements[i].dataset.row) + 1][Number(myElements[i].dataset.col)] = {color: 'red'};
+            //Removing the element from it's original position in the JS matrix
+            board[Number(myElements[i].dataset.row)][Number(myElements[i].dataset.col)] = 0;
 
+            //Puts the element one place down in the DOM
+            let boardElement = document.querySelector(`[data-row='${Number(myElements[i].dataset.row) + 1}'][data-col='${Number(myElements[i].dataset.col)}']`);
+            boardElement.style.backgroundColor = board[Number(myElements[i].dataset.row) + 1][Number(myElements[i].dataset.col)].color;
+            boardElement.classList.add('moving');
+            //Removing the element from it's original position in the DOM
+            myElements[i].style.backgroundColor = '';
+            myElements[i].classList.remove('moving');
+        }
+    }
+    else {
+        while (myElements.length !== 0) {
+            myElements[0].classList.remove('moving');
+        }
+    }
+}
+
+
+function moveLeft(board)
+{
+    let myElements = document.getElementsByClassName('cube moving');
+    let coordinates = getMovingElementCoordinates(myElements);
+    // Sort coordinates by row, ascending
+    coordinates.sort(function(a, b){
+        if (a.row < b.row)
+        {
+            return -1;
+        }
+        if (a.row > b.row)
+        {
+            return 1;
+        }
+      return 0;
+    });
+
+    for(let i=0; i < coordinates.length; i++)
+    {
+        // Get the element with matching coordinates
+        let myElement = document.querySelector(`[data-row="${coordinates[i].row}"][data-col="${coordinates[i].col}"]`);
+        // Check if the element can be shifted to the left
+        let didntReachTheSideYet = didntReachTheSideYet(myElement, 'left');
+        let noElementToTheSide = noElementToTheSide(board, myElement, 'left');
+        if (didntReachTheSideYet && noElementToTheSide)
+        {
+            //Moves the current element one step to the left
+            shiftSideways(board, myElement, 'left');
+        }
+    }
+}
+
+
+function moveRight(board)
+{
+    let myElements = document.getElementsByClassName('cube moving');
+    let coordinates = getMovingElementCoordinates(myElements);
+    // Sort coordinates by row, descending
+    coordinates.sort(function(a, b){
+        if (a.row > b.row)
+        {
+            return -1;
+        }
+        if (a.row < b.row)
+        {
+            return 1;
+        }
+      return 0;
+    });
+
+    for(let i=0; i < coordinates.length; i++)
+    {
+        // Get the element with matching coordinates
+        let myElement = document.querySelector(`[data-row="${coordinates[i].row}"][data-col="${coordinates[i].col}"]`);
+        // Check if the element can be shifted to the right
+        let didntReachTheSideYet = didntReachTheSideYet(myElement, 'right');
+        let noElementToTheSide = noElementToTheSide(board, myElement, 'right');
+        if (didntReachTheSideYet && noElementToTheSide)
+        {
+            //Moves the current element one step to the right
+            shiftSideways(board, myElement, 'right');
+        }
+    }
+}
+
+
+function changePosition(direction, board)
+{
     switch(direction)
     {
         case 'down':
-            if(row !== 21 && board[row+1][col] === 0)
-            {
-                myElements[0].style.backgroundColor='';
-                myElements[0].classList.remove('moving');
-                board[row][col] = 0;
-                board[row+1][col] = {color: 'red'};
-                let boardElement = document.querySelector(`[data-row='${row+1}'][data-col='${col}']`);
-                boardElement.style.backgroundColor = board[row+1][col].color;
-                boardElement.classList.add('moving');
-            }
+            moveDown(board);
             break;
         case 'left':
-            if(board[row][col-1] === 0 && col !== 0)
-            {
-                myElements[0].style.backgroundColor='';
-                myElements[0].classList.remove('moving');
-                board[row][col] = 0;
-                board[row][col-1] = {color: 'red'};
-                let boardElement = document.querySelector(`[data-row='${row}'][data-col='${col-1}']`);
-                boardElement.style.backgroundColor = board[row][col-1].color;
-                boardElement.classList.add('moving');
-            }
+            moveLeft(board);
             break;
         case 'right':
-            if(board[row][col+1] === 0 && col !== 11)
-            {
-                myElements[0].style.backgroundColor='';
-                myElements[0].classList.remove('moving');
-                board[row][col] = 0;
-                board[row][col+1] = {color: 'red'};
-                let boardElement = document.querySelector(`[data-row='${row}'][data-col='${col+1}']`);
-                boardElement.style.backgroundColor = board[row][col+1].color;
-                boardElement.classList.add('moving');
-            }
+            moveRight(board);
             break;
     }
 }
