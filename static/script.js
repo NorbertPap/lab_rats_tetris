@@ -14,6 +14,8 @@ function getBoard(rowCount, colCount){
 
 function moveDown(board)
 {
+    let col;
+    let row;
     let myInterval = setInterval(
     function ()
     {
@@ -29,7 +31,7 @@ function moveDown(board)
         }
         coordinates.reverse();
         let condition = true;
-        for (coordinate of coordinates) {
+        for (const coordinate of coordinates) {
             if (board[coordinate.row + 1][coordinate.col] !== 0 &&
                 !(document.querySelector(`[data-row='${coordinate.row + 1}'][data-col='${coordinate.col}'].moving`))) {
                 condition = false;
@@ -41,9 +43,14 @@ function moveDown(board)
             // coordinates.sort(function (a, b) {
             //     return b.row - a.row
             // });
-            for (let i = 3; i >-1; i--) {
+            console.log(myElements);
+            for (let i = 3; i > -1; i--) {
                 myElements[i].style.backgroundColor = '';
                 myElements[i].classList.remove('moving');
+                console.log(myElements);
+                console.log(i);
+                console.log(board[i]);
+
                 board[myElements[i].dataset.row][myElements[i].dataset.col] = 0;
                 board[myElements[i].dataset.row+1][myElements[i].dataset.col] = {color: 'red'};
                 let boardElement = document.querySelector(`[data-row='${myElements[i].dataset.row+1}'][data-col='${myElements[i].dataset.col}']`);
