@@ -112,57 +112,57 @@ function fallingMovement(board)
 
 
 function createMovingElement(board) {
-    // function lineElement(board) {
-    //     // Creates a new moving element in JS matrix
-    //     board[0][5] = {color: 'red'};
-    //     board[1][5] = {color: 'red'};
-    //     board[2][5] = {color: 'red'};
-    //     board[3][5] = {color: 'red'};
-    //     // Places the moving elements into HTML
-    //     let boardElements = [];
-    //     for (let i = 0; i < 4; i++) {
-    //         boardElements.push(document.querySelector(`[data-row="${i}"][data-col='5']`));
-    //         boardElements[i].style.backgroundColor = board[0][5].color;
-    //         boardElements[i].classList.add('moving');
-    //     }
-    //     return board
-    // }
+    const lineElement = function lineElement(board) {
+        // Creates a new moving element in JS matrix
+        board[0][5] = {color: 'red'};
+        board[1][5] = {color: 'red'};
+        board[2][5] = {color: 'red'};
+        board[3][5] = {color: 'red'};
+        // Places the moving elements into HTML
+        let boardElements = [];
+        for (let i = 0; i < 4; i++) {
+            boardElements.push(document.querySelector(`[data-row="${i}"][data-col='5']`));
+            boardElements[i].style.backgroundColor = board[0][5].color;
+            boardElements[i].classList.add('moving');
+        }
+        return board;
+    };
 
-    // function cubeElement(board) {
-    //     board[0][5] = {color: 'red'};
-    //     board[1][5] = {color: 'red'};
-    //     board[0][6] = {color: 'red'};
-    //     board[1][6] = {color: 'red'};
-    //     let boardElements = [];
-    //     for (let i = 0; i < 4; i++) {
-    //         boardElements.push(document.querySelector(`[data-row="${i}"][data-col="5"]`));
-    //         boardElements.push(document.querySelector(`[data-row="${i}"][data-col="6"]`));
-    //         boardElements[i].style.backgroundColor = board[0][5].color;
-    //         boardElements[i].style.backgroundColor = board[0][6].color;
-    //         boardElements[i].classList.add('moving');
-    //     }
-    //     return board
-    // }
+    const cubeElement = function cubeElement(board) {
+        board[0][5] = {color: 'red'};
+        board[1][5] = {color: 'red'};
+        board[0][6] = {color: 'red'};
+        board[1][6] = {color: 'red'};
+        let boardElements = [];
+        for (let i = 0; i < 4; i++) {
+            boardElements.push(document.querySelector(`[data-row="${i}"][data-col="5"]`));
+            boardElements.push(document.querySelector(`[data-row="${i}"][data-col="6"]`));
+            boardElements[i].style.backgroundColor = board[0][5].color;
+            boardElements[i].style.backgroundColor = board[0][6].color;
+            boardElements[i].classList.add('moving');
+        }
+        return board;
+    };
 
-    // function bigLElement(board) {
-    //     board[0][4] = {color: 'red'};
-    //     board[0][5] = {color: 'red'};
-    //     board[0][6] = {color: 'red'};
-    //     // board[1][5] = {color: 'red'};
-    //     let boardElements = [];
-    //     for (let i = 0; i < 4; i++) {
-    //         boardElements.push(document.querySelector(`[data-row="${i}"][data-col="4"]`));
-    //         boardElements.push(document.querySelector(`[data-row="${i}"][data-col="5"]`));
-    //         boardElements.push(document.querySelector(`[data-row="${i}"][data-col="6"]`));
-    //         boardElements[i].style.backgroundColor = board[0][4].color;
-    //         boardElements[i].style.backgroundColor = board[0][5].color;
-    //         boardElements[i].style.backgroundColor = board[0][6].color;
-    //         boardElements[i].classList.add('moving');
-    //     }
-    //         return board
-    // }
+    const bigLElement = function bigLElement(board) {
+        board[0][4] = {color: 'red'};
+        board[0][5] = {color: 'red'};
+        board[0][6] = {color: 'red'};
+        // board[1][5] = {color: 'red'};
+        let boardElements = [];
+        for (let i = 0; i < 4; i++) {
+            boardElements.push(document.querySelector(`[data-row="${i}"][data-col="4"]`));
+            boardElements.push(document.querySelector(`[data-row="${i}"][data-col="5"]`));
+            boardElements.push(document.querySelector(`[data-row="${i}"][data-col="6"]`));
+            boardElements[i].style.backgroundColor = board[0][4].color;
+            boardElements[i].style.backgroundColor = board[0][5].color;
+            boardElements[i].style.backgroundColor = board[0][6].color;
+            boardElements[i].classList.add('moving');
+        }
+            return board;
+    };
 
-    function horizontalLine(board) {
+    const horizontalLine = function horizontalLine(board) {
         board[0][5] = {color: 'red'};
         board[0][6] = {color: 'red'};
         board[0][7] = {color: 'red'};
@@ -179,9 +179,14 @@ function createMovingElement(board) {
             boardElements[i].style.backgroundColor = board[0][8].color;
             boardElements[i].classList.add('moving');
         }
-        return board
+        return board;
+    };
+
+    function chooseOneElement(board) {
+        let elementList = [horizontalLine, bigLElement, cubeElement, lineElement];
+        return elementList[Math.floor(Math.random() * elementList.length)](board);
     }
-    return horizontalLine(board)
+    return chooseOneElement(board);
 }
 
 
