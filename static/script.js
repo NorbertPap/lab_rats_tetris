@@ -129,19 +129,6 @@ function createMovingElement(board)
 }
 
 
-function didntReachTheSideYet(myElement, whichSide)
-{
-    console.log(myElement);
-    switch(whichSide)
-    {
-        case 'left':
-            return  myElement.data.col === "0";
-        case 'right':
-            return myElement.data.col === "11";
-    }
-}
-
-
 function noElementToTheSide(board, myElement, whichSide)
 {
     switch(whichSide)
@@ -245,8 +232,8 @@ function moveLeft(board)
         // Get the element with matching coordinates
         let myElement = document.querySelector(`[data-row="${coordinates[i].row}"][data-col="${coordinates[i].col}"]`);
         // Check if the element can be shifted to the left
-        let didntReachTheSideYet = didntReachTheSideYet(myElement, 'left');
-        let noElementToTheSide = noElementToTheSide(board, myElement, 'left');
+        let didntReachTheSideYet = myElement.dataset.col !== "0";
+        let noElementToTheSide = board[Number(myElement.dataset.row)][Number(myElement.dataset.col)-1] === 0;
         if (didntReachTheSideYet && noElementToTheSide)
         {
             //Moves the current element one step to the left
@@ -278,8 +265,8 @@ function moveRight(board)
         // Get the element with matching coordinates
         let myElement = document.querySelector(`[data-row="${coordinates[i].row}"][data-col="${coordinates[i].col}"]`);
         // Check if the element can be shifted to the right
-        let didntReachTheSideYet = didntReachTheSideYet(myElement, 'right');
-        let noElementToTheSide = noElementToTheSide(board, myElement, 'right');
+        let didntReachTheSideYet = myElement.dataset.col !== "11";
+        let noElementToTheSide = board[Number(myElement.dataset.row)][Number(myElement.dataset.col)+1] === 0;
         if (didntReachTheSideYet && noElementToTheSide)
         {
             //Moves the current element one step to the right
