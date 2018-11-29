@@ -144,24 +144,44 @@ function createMovingElement(board) {
     //     return board
     // }
 
-    function bigLElement(board) {
-        board[0][4] = {color: 'red'};
+    // function bigLElement(board) {
+    //     board[0][4] = {color: 'red'};
+    //     board[0][5] = {color: 'red'};
+    //     board[0][6] = {color: 'red'};
+    //     // board[1][5] = {color: 'red'};
+    //     let boardElements = [];
+    //     for (let i = 0; i < 4; i++) {
+    //         boardElements.push(document.querySelector(`[data-row="${i}"][data-col="4"]`));
+    //         boardElements.push(document.querySelector(`[data-row="${i}"][data-col="5"]`));
+    //         boardElements.push(document.querySelector(`[data-row="${i}"][data-col="6"]`));
+    //         boardElements[i].style.backgroundColor = board[0][4].color;
+    //         boardElements[i].style.backgroundColor = board[0][5].color;
+    //         boardElements[i].style.backgroundColor = board[0][6].color;
+    //         boardElements[i].classList.add('moving');
+    //     }
+    //         return board
+    // }
+
+    function horizontalLine(board) {
         board[0][5] = {color: 'red'};
         board[0][6] = {color: 'red'};
-        // board[1][5] = {color: 'red'};
+        board[0][7] = {color: 'red'};
+        board[0][8] = {color: 'red'};
         let boardElements = [];
         for (let i = 0; i < 4; i++) {
-            boardElements.push(document.querySelector(`[data-row="${i}"][data-col="4"]`));
             boardElements.push(document.querySelector(`[data-row="${i}"][data-col="5"]`));
             boardElements.push(document.querySelector(`[data-row="${i}"][data-col="6"]`));
-            boardElements[i].style.backgroundColor = board[0][4].color;
+            boardElements.push(document.querySelector(`[data-row="${i}"][data-col="7"]`));
+            boardElements.push(document.querySelector(`[data-row="${i}"][data-col="8"]`));
             boardElements[i].style.backgroundColor = board[0][5].color;
             boardElements[i].style.backgroundColor = board[0][6].color;
+            boardElements[i].style.backgroundColor = board[0][7].color;
+            boardElements[i].style.backgroundColor = board[0][8].color;
             boardElements[i].classList.add('moving');
         }
-            return board
+        return board
     }
-    return bigLElement(board)
+    return horizontalLine(board)
 }
 
 
