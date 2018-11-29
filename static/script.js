@@ -1,4 +1,5 @@
-function getBoard(rowCount, colCount){
+function getBoard(rowCount, colCount)
+{
     let board = [];
     for(let i=0; i<rowCount; i++)
     {
@@ -11,8 +12,52 @@ function getBoard(rowCount, colCount){
     return board;
 }
 
+function moveElementIfPossible(board, myElements, noElementReachedBottom, noNonMovingElementBeneathAnyElement)
+{
+    if(noElementReachedBottom && noNonMovingElementBeneathAnyElement)
+    {
+        // Moves every element one step down from the lowest element to the highest
+        // by moving them down in reverse order compared to their place in their list
+        for (let i = 3; i > -1; i--)
+        {
+            //Puts the element one place down in the JS matrix
+            board[Number(myElements[i].dataset.row) + 1][Number(myElements[i].dataset.col)] = {color: 'red'};
+            //Removing the element from it's original position in the JS matrix
+            board[Number(myElements[i].dataset.row)][Number(myElements[i].dataset.col)] = 0;
 
-function moveDown(board)
+            //Puts the element one place down in the DOM
+            let boardElement = document.querySelector(`[data-row='${Number(myElements[i].dataset.row) + 1}'][data-col='${Number(myElements[i].dataset.col)}']`);
+            boardElement.style.backgroundColor = board[Number(myElements[i].dataset.row) + 1][Number(myElements[i].dataset.col)].color;
+            boardElement.classList.add('moving');
+            //Removing the element from it's original position in the DOM
+            myElements[i].style.backgroundColor = '';
+            myElements[i].classList.remove('moving');
+        }
+    }
+    else {
+        while (myElements.length !== 0) {
+            myElements[0].classList.remove('moving');
+        }
+    }
+}
+
+
+function checkIfBottomReached(board, coordinates)
+{
+//Get a condition that is true if no moving element has hit bottom yet
+    let noElementReachedBottom = true;
+    for (const coordinate of coordinates)
+    {
+        if (coordinate.row === 21) {
+            noElementReachedBottom = false;
+            break;
+        }
+    }
+    return noElementReachedBottom;
+}
+
+
+function checkIfAbovePreviousElement(board, coordinates)
 {
 // Get a condition that is true only if each moving element doesn't have a non moving element beneath it
     let noNonMovingElementBeneathAnyElement = true;
@@ -75,41 +120,13 @@ function createMovingElement(board)
     board[3][5] = {color: 'red'};
     // Places the moving elements into HTML
     let boardElements = [];
-    for(let i = 0; i<4; i++){
+    for (let i = 0; i < 4; i++) {
         boardElements.push(document.querySelector(`[data-row="${i}"][data-col='5']`));
         boardElements[i].style.backgroundColor = board[0][5].color;
         boardElements[i].classList.add('moving');
     }
+    return board;
 }
-
-
-function fall(board)
-{
-    let myInterval = setInterval(
-        function ()
-        {
-            if(document.getElementsByClassName('cube moving').length === 0)
-            {
-                createMovingElement(board);
-                moveDown(board);
-            }
-        }, 150);
-}
-
-//
-// function slide()
-// {
-//     if(row !== 21 && board[row+1][col] === 0)
-//             {
-//                 myElements[0].style.backgroundColor='';
-//                 myElements[0].classList.remove('moving');
-//                 board[row][col] = 0;
-//                 board[row+1][col] = {color: 'red'};
-//                 let boardElement = document.querySelector(`[data-row='${row+1}'][data-col='${col}']`);
-//                 boardElement.style.backgroundColor = board[row+1][col].color;
-//                 boardElement.classList.add('moving');
-//             }
-// }
 
 
 function changePosition(direction, board)
