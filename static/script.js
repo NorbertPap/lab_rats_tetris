@@ -195,8 +195,46 @@ function createMovingElement(board) {
         return board;
     };
 
+    const TElement = function TElement(board) {
+        board[0][4] = {color: 'red'};
+        board[0][5] = {color: 'red'};
+        board[0][6] = {color: 'red'};
+        board[1][5] = {color: 'red'};
+
+        let boardElements = [];
+        boardElements.push(document.querySelector(`[data-row="0"][data-col="4"]`));
+        boardElements.push(document.querySelector(`[data-row="0"][data-col="5"]`));
+        boardElements.push(document.querySelector(`[data-row="0"][data-col="6"]`));
+        boardElements.push(document.querySelector(`[data-row="1"][data-col="5"]`));
+
+        for (let i = 0; i < 4; i++) {
+            boardElements[i].style.backgroundColor = board[0][5].color;
+            boardElements[i].classList.add('moving');
+        }
+        return board;
+    };
+
+    const SElement = function SElement(board) {
+        board[0][5] = {color: 'red'};
+        board[0][6] = {color: 'red'};
+        board[1][4] = {color: 'red'};
+        board[1][5] = {color: 'red'};
+
+        let boardElements = [];
+        boardElements.push(document.querySelector(`[data-row="0"][data-col="5"]`));
+        boardElements.push(document.querySelector(`[data-row="0"][data-col="6"]`));
+        boardElements.push(document.querySelector(`[data-row="1"][data-col="4"]`));
+        boardElements.push(document.querySelector(`[data-row="1"][data-col="5"]`));
+
+        for (let i = 0; i < 4; i++) {
+            boardElements[i].style.backgroundColor = board[0][5].color;
+            boardElements[i].classList.add('moving');
+        }
+        return board;
+    };
+
     function chooseOneElement(board) {
-        let elementList = [horizontalLine, bigLElement, cubeElement, lineElement];
+        let elementList = [horizontalLine, bigLElement, cubeElement, lineElement, TElement, SElement];
         return elementList[Math.floor(Math.random() * elementList.length)](board);
     }
 
@@ -410,20 +448,8 @@ function shifting(event, board)
 }
 
 
-function main()
+function checkColumnFill(board)
 {
-    // Initialize JS representation of the play area
-    let row = 22;
-    let col = 12;
-    let board = getBoard(row, col);
-
-    // Making the page responsive to sideways key presses, then setting up the basic movement
-    document.addEventListener('keydown', function() { shifting(event, board) });
-    fallingMovement(board);
-}
-
-
-function checkColumnFill(board) {
     let topRowElements = document.querySelectorAll('[data-row="0"][style="background-color: red;"]');
     for(element of topRowElements)
     {
@@ -436,7 +462,8 @@ function checkColumnFill(board) {
 }
 
 
-function checkRowFill(board) {
+function checkRowFill(board)
+{
     let filledRows = [];
 
     for (let j = 21; j>0; j--) {
@@ -456,7 +483,8 @@ function checkRowFill(board) {
 }
 
 
-function deleteRow(board, rows) {
+function deleteRow(board, rows)
+{
     for(row of rows)
     {
         // Delete from matrix.
@@ -482,7 +510,8 @@ function deleteRow(board, rows) {
 }
 
 
-function moveRowsDown(board, rows) {
+function moveRowsDown(board, rows)
+{
     let rowsToBeFilled = [];
     for(let i=0; i<rows.length; i++)
     {
@@ -514,4 +543,15 @@ function closeEmptyRowSpace(board, rowToClose)
 }
 
 
+function main()
+{
+    // Initialize JS representation of the play area
+    let row = 22;
+    let col = 12;
+    let board = getBoard(row, col);
+
+    // Making the page responsive to sideways key presses, then setting up the basic movement
+    document.addEventListener('keydown', function() { shifting(event, board) });
+    fallingMovement(board);
+}
 main();
