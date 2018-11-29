@@ -157,24 +157,6 @@ function createMovingElement(board) {
         return board;
     };
 
-    const bigLElement = function bigLElement(board) {
-        board[0][4] = {color: 'red'};
-        board[0][5] = {color: 'red'};
-        board[0][6] = {color: 'red'};
-        // board[1][5] = {color: 'red'};
-        let boardElements = [];
-        for (let i = 0; i < 4; i++) {
-            boardElements.push(document.querySelector(`[data-row="${i}"][data-col="4"]`));
-            boardElements.push(document.querySelector(`[data-row="${i}"][data-col="5"]`));
-            boardElements.push(document.querySelector(`[data-row="${i}"][data-col="6"]`));
-            boardElements[i].style.backgroundColor = board[0][4].color;
-            boardElements[i].style.backgroundColor = board[0][5].color;
-            boardElements[i].style.backgroundColor = board[0][6].color;
-            boardElements[i].classList.add('moving');
-        }
-        return board;
-    };
-
     const horizontalLine = function horizontalLine(board) {
         board[0][5] = {color: 'red'};
         board[0][6] = {color: 'red'};
@@ -214,7 +196,7 @@ function createMovingElement(board) {
         return board;
     };
 
-    const SElement = function SElement(board) {
+    const SElement1 = function SElement1(board) {
         board[0][5] = {color: 'red'};
         board[0][6] = {color: 'red'};
         board[1][4] = {color: 'red'};
@@ -233,8 +215,63 @@ function createMovingElement(board) {
         return board;
     };
 
+    const SElement2 = function SElement2(board) {
+        board[0][4] = {color: 'red'};
+        board[0][5] = {color: 'red'};
+        board[1][5] = {color: 'red'};
+        board[1][6] = {color: 'red'};
+
+        let boardElements = [];
+        boardElements.push(document.querySelector(`[data-row="0"][data-col="4"]`));
+        boardElements.push(document.querySelector(`[data-row="0"][data-col="5"]`));
+        boardElements.push(document.querySelector(`[data-row="1"][data-col="5"]`));
+        boardElements.push(document.querySelector(`[data-row="1"][data-col="6"]`));
+
+        for (let i = 0; i < 4; i++) {
+            boardElements[i].style.backgroundColor = board[0][5].color;
+            boardElements[i].classList.add('moving');
+        }
+        return board;
+    };
+
+    const LElement1 = function LElement1(board) {
+        board[0][4] = {color: 'red'};
+        board[0][5] = {color: 'red'};
+        board[0][6] = {color: 'red'};
+        board[1][6] = {color: 'red'};
+
+        let boardElements = [];
+        boardElements.push(document.querySelector(`[data-row="0"][data-col="4"]`));
+        boardElements.push(document.querySelector(`[data-row="0"][data-col="5"]`));
+        boardElements.push(document.querySelector(`[data-row="0"][data-col="6"]`));
+        boardElements.push(document.querySelector(`[data-row="1"][data-col="6"]`));
+        for (let i = 0; i < 4; i++) {
+            boardElements[i].style.backgroundColor = board[0][5].color;
+            boardElements[i].classList.add('moving');
+        }
+        return board;
+    };
+
+    const LElement2 = function LElement2(board) {
+        board[0][4] = {color: 'red'};
+        board[0][5] = {color: 'red'};
+        board[0][6] = {color: 'red'};
+        board[1][4] = {color: 'red'};
+
+        let boardElements = [];
+        boardElements.push(document.querySelector(`[data-row="0"][data-col="4"]`));
+        boardElements.push(document.querySelector(`[data-row="0"][data-col="5"]`));
+        boardElements.push(document.querySelector(`[data-row="0"][data-col="6"]`));
+        boardElements.push(document.querySelector(`[data-row="1"][data-col="4"]`));
+        for (let i = 0; i < 4; i++) {
+            boardElements[i].style.backgroundColor = board[0][5].color;
+            boardElements[i].classList.add('moving');
+        }
+        return board;
+    };
+
     function chooseOneElement(board) {
-        let elementList = [horizontalLine, bigLElement, cubeElement, lineElement, TElement, SElement];
+        let elementList = [horizontalLine, LElement1, LElement2, cubeElement, lineElement, TElement, SElement1, SElement2];
         return elementList[Math.floor(Math.random() * elementList.length)](board);
     }
 
