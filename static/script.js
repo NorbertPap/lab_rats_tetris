@@ -95,6 +95,10 @@ function fallingMovement(board)
     // and moves them in the JS matrix and the HTML every 300 milliseconds
     let myInterval = setInterval(
     function () {
+        if (checkColumnFill(board)){
+            clearInterval(myInterval);
+            console.log('end');
+        }
         // Adds new moving element if there's nothing in the play area
         let myElements = document.getElementsByClassName('cube moving');
         if (document.getElementsByClassName('cube moving').length === 0) {
@@ -106,6 +110,10 @@ function fallingMovement(board)
             let noNonMovingElementBeneathAnyElement = checkIfAbovePreviousElement(board, coordinates);
             let noElementReachedBottom = checkIfBottomReached(board, coordinates);
             moveElementIfPossible(board, myElements, noElementReachedBottom, noNonMovingElementBeneathAnyElement);
+            let checkRow = checkRowFill(board);
+            if (checkRow.bool === true) {
+                deleteRow(board, checkRow.row);
+            }
         }
     }, 300);
 }
@@ -334,7 +342,74 @@ function main()
     // Making the page responsive to sideways key presses, then setting up the basic movement
     document.addEventListener('keydown', function() { shifting(event, board) });
     fallingMovement(board);
-
-
 }
+
+function checkColumnFill(board) {
+    for (let j = 0; j<11; j++) {
+        let filledColumn = [];
+        for (let i = 0; i<21; i++) {
+            if (board[i][j] !== 0) {
+                filledColumn.push(1);
+            }
+        }
+        if (filledColumn.length === 21) {
+            return true;
+        }
+    }
+}
+
+function checkRowFill(board) {
+    for (let j = 21; j>0; j--) {
+        var filledRow = [];
+        let i = 0;
+        for (i; i<12; i++) {
+            if (board[j][i] !== 0) {
+                filledRow.push(1);
+            }
+            if (filledRow.length === 12) {
+                return { bool: true, row: i };
+            }
+        }
+    }
+    return { bool: false }
+}
+
+function deleteRow(board, row) {
+    // Delete from matrix.
+    for (let i = 0; i<11; i++) {
+        board[row][i] = 0;
+    }
+    // Delete from Html.
+    for (let i = 0; i<11; i++) {
+        let element = document.querySelector(`[data-row="${row}"][data-col='${i}'][style="background-color: red;"]`);
+        element['style']['backgroundColor'] = '';
+    }
+    moveRowsDown(board, row);
+}
+
+function moveRowsDown(board, row) {
+    // Move matrix.
+    for (let i = row; i > 0; i--) {
+        for (let j = 0; i<11; j++);{
+            try {
+                board[row][j] = board[row-1][j];
+            } catch (e) {
+                break;
+            }
+        }
+    }
+    // Move Html.
+    for (let i = row; i > 0; i--) {
+        for (let j = 0; i<11; j++);{
+            try {
+                let elementUnder = document.querySelector(`[data-row="${row}"][data-col='${j}']`);
+                let elementAbove = document.querySelector(`[data-row="${row-1}"][data-col='${j}']`);
+                elementUnder['style']['backgroundColor'] = elementAbove['style']['backgroundColor'];
+            } catch (e) {
+                break;
+            }
+        }
+    }
+}
+
 main();
