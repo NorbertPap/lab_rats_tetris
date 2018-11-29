@@ -119,7 +119,7 @@ function fallingMovement(board)
                 deleteRow(board, checkRow);
             }
         }
-    }, 100);
+    }, 300);
 }
 
 
