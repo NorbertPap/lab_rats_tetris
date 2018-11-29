@@ -290,8 +290,8 @@ function moveLeft(board)
       return 0;
     });
 
-    noElementReachedTheSideYet = true;
-    noElementHasElementToTheSide = true;
+    let noElementReachedTheSideYet = true;
+    let noElementHasElementToTheSide = true;
     for(let i=0; i < coordinates.length; i++)
     {
         // Get the element with matching coordinates
@@ -335,8 +335,8 @@ function moveRight(board)
     });
     coordinates.reverse();
 
-    noElementReachedTheSideYet = true;
-    noElementHasElementToTheSide = true;
+    let noElementReachedTheSideYet = true;
+    let noElementHasElementToTheSide = true;
     for(let i=0; i < coordinates.length; i++)
     {
         // Get the element with matching coordinates
@@ -424,16 +424,14 @@ function main()
 
 
 function checkColumnFill(board) {
-    for (let j = 0; j<12; j++) {
-        let filledColumn = [];
-        for (let i = 0; i<21; i++) {
-            if (board[i][j] !== 0) {
-                filledColumn.push(1);
-            }
-        }
-        if (filledColumn.length === 21) {
+    let topRowElements = document.querySelectorAll('[data-row="0"][style="background-color: red;"]');
+    for(element of topRowElements)
+    {
+        if(!element.classList.contains('moving'))
+        {
             return true;
         }
+
     }
 }
 
@@ -482,6 +480,7 @@ function deleteRow(board, rows) {
     }
     moveRowsDown(board, rows);
 }
+
 
 function moveRowsDown(board, rows) {
     let rowsToBeFilled = [];
