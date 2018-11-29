@@ -1,5 +1,6 @@
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 # Created by https://www.gitignore.io/api/flask,virtualenv,pycharm+all
 # Edit at https://www.gitignore.io/?templates=flask,virtualenv,pycharm+all
 .idea/
@@ -8,6 +9,16 @@
 # Edit at https://www.gitignore.io/?templates=venv,flask,pycharm+all
 
 >>>>>>> master
+=======
+# Created by https://www.gitignore.io/api/venv,flask,pycharm+all
+# Edit at https://www.gitignore.io/?templates=venv,flask,pycharm+all
+
+=======
+# Created by https://www.gitignore.io/api/flask,virtualenv,pycharm+all
+# Edit at https://www.gitignore.io/?templates=flask,virtualenv,pycharm+all
+.idea/
+>>>>>>> development
+>>>>>>> new_type_of_elements
 ### Flask ###
 instance/*
 !instance/.gitignore
@@ -210,10 +221,17 @@ modules.xml
 *.ipr
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 ### VirtualEnv ###
 =======
 ### venv ###
 >>>>>>> master
+=======
+### venv ###
+=======
+### VirtualEnv ###
+>>>>>>> development
+>>>>>>> new_type_of_elements
 # Virtualenv
 # http://iamzed.com/2009/05/07/a-primer-on-virtualenv/
 [Bb]in
@@ -226,7 +244,14 @@ pyvenv.cfg
 pip-selfcheck.json
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 # End of https://www.gitignore.io/api/flask,virtualenv,pycharm+all
 =======
 # End of https://www.gitignore.io/api/venv,flask,pycharm+all
 >>>>>>> master
+=======
+# End of https://www.gitignore.io/api/venv,flask,pycharm+all
+=======
+# End of https://www.gitignore.io/api/flask,virtualenv,pycharm+all
+>>>>>>> development
+>>>>>>> new_type_of_elements
