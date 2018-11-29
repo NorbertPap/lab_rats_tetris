@@ -137,6 +137,7 @@ function createMovingElement(board)
         boardElements[i].style.backgroundColor = board[0][5].color;
         boardElements[i].classList.add('moving');
     }
+    boardElements[2].classList.add('origin');
     return board;
 }
 
@@ -179,7 +180,7 @@ function shiftSideways(board, myElement, whichSide)
 
 function moveDown(board)
 {
-    let myElements = document.getElementsByClassName('cube moving');
+    let myElements = document.getElementsByClassName('cube moving', 'cube moving origin');
     let noElementReachedBottom = checkIfBottomReached(board, getMovingElementCoordinates(myElements));
     let noNonMovingElementBeneathAnyElement = checkIfAbovePreviousElement(board, getMovingElementCoordinates(myElements));
     if(noElementReachedBottom && noNonMovingElementBeneathAnyElement)
@@ -192,7 +193,7 @@ function moveDown(board)
             board[Number(myElements[i].dataset.row) + 1][Number(myElements[i].dataset.col)] = {color: 'red'};
             //Removing the element from it's original position in the JS matrix
             board[Number(myElements[i].dataset.row)][Number(myElements[i].dataset.col)] = 0;
-
+            //if (myElements[i])
             //Puts the element one place down in the DOM
             let boardElement = document.querySelector(`[data-row='${Number(myElements[i].dataset.row) + 1}'][data-col='${Number(myElements[i].dataset.col)}']`);
             boardElement.style.backgroundColor = board[Number(myElements[i].dataset.row) + 1][Number(myElements[i].dataset.col)].color;
@@ -301,22 +302,16 @@ function shifting(event, board)
     {
         // Left
         case 65:
-            changePosition('left', board);
-            break;
         case 37:
             changePosition('left', board);
             break;
         // Right
         case 68:
-            changePosition('right', board);
-            break;
         case 39:
             changePosition('right', board);
             break;
         // Down
         case 83:
-            changePosition('down', board);
-            break;
         case 40:
             changePosition('down', board);
             break;
