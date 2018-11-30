@@ -447,41 +447,41 @@ function moveLeft(board)
 }
 
 
+function moveRight(board)
 {
-//     let myElements = document.getElementsByClassName('cube moving');
-//     let coordinates = getMovingElementCoordinates(myElements);
-//     // Sort coordinates by row, ascending
-//     coordinates.sort(function(a, b){
-//         if (a.col < b.col)
-//         {
-//             return -1;
-//         }
-//         if (a.col > b.col)
-//         {
-//             return 1;
-//         }
-//       return 0;
-//     });
-//
-//     let noElementReachedTheSideYet = true;
-//     let noElementHasElementToTheSide = true;
-//     for(let i=0; i < coordinates.length; i++)
-//     {
-//         // Get the element with matching coordinates
-//         let myElement = document.querySelector(`[data-row="${coordinates[i].row}"][data-col="${coordinates[i].col}"]`);
-//         // Check if the element can be shifted to the left
-//         let didntReachTheSideYet = myElement.dataset.col !== "0";
-//         let noElementToTheSide = board[Number(myElement.dataset.row)][Number(myElement.dataset.col)-1] === 0 || Boolean(document.querySelector(`[data-row="${coordinates[i].row}"][data-col="${coordinates[i].col-1}"].moving`));
-//         //Checks for every element
-//         noElementReachedTheSideYet = noElementReachedTheSideYet && didntReachTheSideYet;
-//         noElementHasElementToTheSide = noElementHasElementToTheSide && noElementToTheSide;
-//
-//     }
-//     if (noElementReachedTheSideYet && noElementHasElementToTheSide)
-//     {
-//         rotateWithVectorTransformation(board, myElements, 'left');
-//     }
-// }
+    let myElements = document.getElementsByClassName('cube moving');
+    let coordinates = getMovingElementCoordinates(myElements);
+    // Sort coordinates by row, ascending
+    coordinates.sort(function(a, b){
+        if (a.col < b.col)
+        {
+            return -1;
+        }
+        if (a.col > b.col)
+        {
+            return 1;
+        }
+      return 0;
+    });
+
+    let noElementReachedTheSideYet = true;
+    let noElementHasElementToTheSide = true;
+    for(let i=0; i < coordinates.length; i++)
+    {
+        // Get the element with matching coordinates
+        let myElement = document.querySelector(`[data-row="${coordinates[i].row}"][data-col="${coordinates[i].col}"]`);
+        // Check if the element can be shifted to the left
+        let didntReachTheSideYet = myElement.dataset.col !== "0";
+        let noElementToTheSide = board[Number(myElement.dataset.row)][Number(myElement.dataset.col)-1] === 0 || Boolean(document.querySelector(`[data-row="${coordinates[i].row}"][data-col="${coordinates[i].col-1}"].moving`));
+        //Checks for every element
+        noElementReachedTheSideYet = noElementReachedTheSideYet && didntReachTheSideYet;
+        noElementHasElementToTheSide = noElementHasElementToTheSide && noElementToTheSide;
+
+    }
+    if (noElementReachedTheSideYet && noElementHasElementToTheSide)
+    {
+        rotateWithVectorTransformation(board, myElements, 'left');
+    }
 }
 
 
