@@ -330,6 +330,7 @@ function removeElementFromDom()
 function rotateWithVectorTransformation(board, myElements, whichSide)
 {
     let coordinates = getMovingElementCoordinates(myElements);
+    let elementsColor = myElements[0]['style']['backgroundColor'];
     let originX = coordinates[2].row;
     let originY = coordinates[2].col;
     if(whichSide === 'left')
@@ -352,21 +353,19 @@ function rotateWithVectorTransformation(board, myElements, whichSide)
             coordinate.row = coordinate.row + originX;
             coordinate.col = coordinate.col + originY;
         }
-
-        for(let coordinate of coordinates)
+        // Buggy code from here
+        for (let i=3; i>-1; i--)
+        {
+            board[Number(myElements[i].dataset.row)][Number(myElements[i].dataset.col)] = 0;
+            myElements[i].style.backgroundColor = '';
+            myElements[i].classList.remove('moving');
+        }
+        for(coordinate of coordinates)
         {
             let newBoardElement = document.querySelector(`[data-row='${Number(coordinate.row)}'][data-col='${Number(coordinate.col)}']`);
-            newBoardElement.style.backgroundColor = board[Number(element.dataset.row)][Number(element.dataset.col)].color;
+            newBoardElement.style.backgroundColor = elementsColor;
             newBoardElement.classList.add('moving');
         }
-        for (let element of myElements)
-        {
-
-            board[Number(element.dataset.row)][Number(element.dataset.col)] = 0;
-            element.style.backgroundColor = '';
-            element.classList.remove('moving');
-        }
-
     }
 }
 
@@ -448,39 +447,41 @@ function moveLeft(board)
 }
 
 
-    let myElements = document.getElementsByClassName('cube moving');
-    let coordinates = getMovingElementCoordinates(myElements);
-    // Sort coordinates by row, ascending
-    coordinates.sort(function(a, b){
-        if (a.col < b.col)
-        {
-            return -1;
-        }
-        if (a.col > b.col)
-        {
-            return 1;
-        }
-      return 0;
-    });
-
-    let noElementReachedTheSideYet = true;
-    let noElementHasElementToTheSide = true;
-    for(let i=0; i < coordinates.length; i++)
-    {
-        // Get the element with matching coordinates
-        let myElement = document.querySelector(`[data-row="${coordinates[i].row}"][data-col="${coordinates[i].col}"]`);
-        // Check if the element can be shifted to the left
-        let didntReachTheSideYet = myElement.dataset.col !== "0";
-        let noElementToTheSide = board[Number(myElement.dataset.row)][Number(myElement.dataset.col)-1] === 0 || Boolean(document.querySelector(`[data-row="${coordinates[i].row}"][data-col="${coordinates[i].col-1}"].moving`));
-        //Checks for every element
-        noElementReachedTheSideYet = noElementReachedTheSideYet && didntReachTheSideYet;
-        noElementHasElementToTheSide = noElementHasElementToTheSide && noElementToTheSide;
-
-    }
-    if (noElementReachedTheSideYet && noElementHasElementToTheSide)
-    {
-        rotateWithVectorTransformation(board, myElements, 'left');
-    }
+{
+//     let myElements = document.getElementsByClassName('cube moving');
+//     let coordinates = getMovingElementCoordinates(myElements);
+//     // Sort coordinates by row, ascending
+//     coordinates.sort(function(a, b){
+//         if (a.col < b.col)
+//         {
+//             return -1;
+//         }
+//         if (a.col > b.col)
+//         {
+//             return 1;
+//         }
+//       return 0;
+//     });
+//
+//     let noElementReachedTheSideYet = true;
+//     let noElementHasElementToTheSide = true;
+//     for(let i=0; i < coordinates.length; i++)
+//     {
+//         // Get the element with matching coordinates
+//         let myElement = document.querySelector(`[data-row="${coordinates[i].row}"][data-col="${coordinates[i].col}"]`);
+//         // Check if the element can be shifted to the left
+//         let didntReachTheSideYet = myElement.dataset.col !== "0";
+//         let noElementToTheSide = board[Number(myElement.dataset.row)][Number(myElement.dataset.col)-1] === 0 || Boolean(document.querySelector(`[data-row="${coordinates[i].row}"][data-col="${coordinates[i].col-1}"].moving`));
+//         //Checks for every element
+//         noElementReachedTheSideYet = noElementReachedTheSideYet && didntReachTheSideYet;
+//         noElementHasElementToTheSide = noElementHasElementToTheSide && noElementToTheSide;
+//
+//     }
+//     if (noElementReachedTheSideYet && noElementHasElementToTheSide)
+//     {
+//         rotateWithVectorTransformation(board, myElements, 'left');
+//     }
+// }
 }
 
 
@@ -503,10 +504,11 @@ function changePosition(direction, board)
 
 function rotateElement(direction, board)
 {
+    let myElements = document.getElementsByClassName('cube moving');
     switch(direction)
     {
         case 'left':
-            flipElement(board)
+            rotateWithVectorTransformation(board, myElements, direction)
             break;
         case 'right':
             break;
