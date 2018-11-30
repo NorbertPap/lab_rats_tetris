@@ -310,6 +310,61 @@ function shiftSideways(board, myElement, whichSide)
             //Removing the element from it's original position in the DOM
             myElement.style.backgroundColor = '';
             myElement.classList.remove('moving');
+            break;
+        }
+    }
+}
+
+
+function ElementToDOM()
+{
+
+}
+
+
+function removeElementFromDom()
+{
+
+}
+
+function rotateWithVectorTransformation(board, myElements, whichSide)
+{
+    let coordinates = getMovingElementCoordinates(myElements);
+    let originX = coordinates[2].row;
+    let originY = coordinates[2].col;
+    if(whichSide === 'left')
+    {
+    //    move all elements to positions relative to (0,0) origin, (by subtracting the coordinates of the origin variable
+        // from the coordinates of each element [element(x)-origin(x), element(y) - origin(y)
+    //    flip coordinates of each element, and munltiply the first coordinate by -1 (element (x,y) = element (-y, x))
+    //    Move all elements back to original position (add origin variable coordinates to element coordinates)
+
+        for(let coordinate of coordinates)
+        {
+            coordinate.row = coordinate.row - originX;
+            coordinate.col = coordinate.col - originY;
+            let temp = coordinate.row;
+
+            coordinate.row = coordinate.col;
+            coordinate.col = temp;
+            coordinate.row *= -1;
+
+            coordinate.row = coordinate.row + originX;
+            coordinate.col = coordinate.col + originY;
+        }
+
+        for(let coordinate of coordinates)
+        {
+            let newBoardElement = document.querySelector(`[data-row='${Number(coordinate.row)}'][data-col='${Number(coordinate.col)}']`);
+            newBoardElement.style.backgroundColor = board[Number(element.dataset.row)][Number(element.dataset.col)].color;
+            newBoardElement.classList.add('moving');
+        }
+        for (let element of myElements)
+        {
+
+            board[Number(element.dataset.row)][Number(element.dataset.col)] = 0;
+            element.style.backgroundColor = '';
+            element.classList.remove('moving');
         }
 
     }
@@ -393,23 +448,20 @@ function moveLeft(board)
 }
 
 
-function moveRight(board)
-{
     let myElements = document.getElementsByClassName('cube moving');
     let coordinates = getMovingElementCoordinates(myElements);
-    // Sort coordinates by row, descending
+    // Sort coordinates by row, ascending
     coordinates.sort(function(a, b){
-        if (a.row > b.row)
+        if (a.col < b.col)
         {
             return -1;
         }
-        if (a.row < b.row)
+        if (a.col > b.col)
         {
             return 1;
         }
       return 0;
     });
-    coordinates.reverse();
 
     let noElementReachedTheSideYet = true;
     let noElementHasElementToTheSide = true;
@@ -418,8 +470,8 @@ function moveRight(board)
         // Get the element with matching coordinates
         let myElement = document.querySelector(`[data-row="${coordinates[i].row}"][data-col="${coordinates[i].col}"]`);
         // Check if the element can be shifted to the left
-        let didntReachTheSideYet = myElement.dataset.col !== "11";
-        let noElementToTheSide = board[Number(myElement.dataset.row)][Number(myElement.dataset.col)+1] === 0 || Boolean(document.querySelector(`[data-row="${coordinates[i].row}"][data-col="${coordinates[i].col+1}"].moving`));
+        let didntReachTheSideYet = myElement.dataset.col !== "0";
+        let noElementToTheSide = board[Number(myElement.dataset.row)][Number(myElement.dataset.col)-1] === 0 || Boolean(document.querySelector(`[data-row="${coordinates[i].row}"][data-col="${coordinates[i].col-1}"].moving`));
         //Checks for every element
         noElementReachedTheSideYet = noElementReachedTheSideYet && didntReachTheSideYet;
         noElementHasElementToTheSide = noElementHasElementToTheSide && noElementToTheSide;
@@ -427,13 +479,7 @@ function moveRight(board)
     }
     if (noElementReachedTheSideYet && noElementHasElementToTheSide)
     {
-        //Moves the current element one step to the left
-        for(let i=0; i < coordinates.length; i++)
-        {
-            let myElement = document.querySelector(`[data-row="${coordinates[i].row}"][data-col="${coordinates[i].col}"]`);
-            shiftSideways(board, myElement, 'right');
-        }
-
+        rotateWithVectorTransformation(board, myElements, 'left');
     }
 }
 
@@ -460,6 +506,7 @@ function rotateElement(direction, board)
     switch(direction)
     {
         case 'left':
+            flipElement(board)
             break;
         case 'right':
             break;
