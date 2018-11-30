@@ -451,18 +451,19 @@ function moveRight(board)
 {
     let myElements = document.getElementsByClassName('cube moving');
     let coordinates = getMovingElementCoordinates(myElements);
-    // Sort coordinates by row, ascending
+    // Sort coordinates by row, descending
     coordinates.sort(function(a, b){
-        if (a.col < b.col)
+        if (a.row > b.row)
         {
             return -1;
         }
-        if (a.col > b.col)
+        if (a.row < b.row)
         {
             return 1;
         }
       return 0;
     });
+    coordinates.reverse();
 
     let noElementReachedTheSideYet = true;
     let noElementHasElementToTheSide = true;
@@ -471,8 +472,8 @@ function moveRight(board)
         // Get the element with matching coordinates
         let myElement = document.querySelector(`[data-row="${coordinates[i].row}"][data-col="${coordinates[i].col}"]`);
         // Check if the element can be shifted to the left
-        let didntReachTheSideYet = myElement.dataset.col !== "0";
-        let noElementToTheSide = board[Number(myElement.dataset.row)][Number(myElement.dataset.col)-1] === 0 || Boolean(document.querySelector(`[data-row="${coordinates[i].row}"][data-col="${coordinates[i].col-1}"].moving`));
+        let didntReachTheSideYet = myElement.dataset.col !== "11";
+        let noElementToTheSide = board[Number(myElement.dataset.row)][Number(myElement.dataset.col)+1] === 0 || Boolean(document.querySelector(`[data-row="${coordinates[i].row}"][data-col="${coordinates[i].col+1}"].moving`));
         //Checks for every element
         noElementReachedTheSideYet = noElementReachedTheSideYet && didntReachTheSideYet;
         noElementHasElementToTheSide = noElementHasElementToTheSide && noElementToTheSide;
@@ -480,7 +481,13 @@ function moveRight(board)
     }
     if (noElementReachedTheSideYet && noElementHasElementToTheSide)
     {
-        rotateWithVectorTransformation(board, myElements, 'left');
+        //Moves the current element one step to the left
+        for(let i=0; i < coordinates.length; i++)
+        {
+            let myElement = document.querySelector(`[data-row="${coordinates[i].row}"][data-col="${coordinates[i].col}"]`);
+            shiftSideways(board, myElement, 'right');
+        }
+
     }
 }
 
