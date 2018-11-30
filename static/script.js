@@ -353,7 +353,6 @@ function rotateWithVectorTransformation(board, myElements, whichSide)
             coordinate.row = coordinate.row + originX;
             coordinate.col = coordinate.col + originY;
         }
-        // Buggy code from here
         for (let i=3; i>-1; i--)
         {
             board[Number(myElements[i].dataset.row)][Number(myElements[i].dataset.col)] = 0;
