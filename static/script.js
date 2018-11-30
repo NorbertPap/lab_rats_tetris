@@ -21,7 +21,7 @@ function moveElementIfPossible(board, myElements, noElementReachedBottom, noNonM
         for (let i = 3; i > -1; i--)
         {
             //Puts the element one place down in the JS matrix
-            board[Number(myElements[i].dataset.row) + 1][Number(myElements[i].dataset.col)] = {color: 'red'};
+            board[Number(myElements[i].dataset.row) + 1][Number(myElements[i].dataset.col)] = {color: myElements[0]['style']['backgroundColor']};
             //Removing the element from it's original position in the JS matrix
             board[Number(myElements[i].dataset.row)][Number(myElements[i].dataset.col)] = 0;
 
@@ -100,6 +100,7 @@ function fallingMovement(board)
             clearInterval(myInterval);
             // Placeholder for actual action
             console.log('end');
+            return;
         }
         // Adds new moving element if there isn't any in the play area currently
         let myElements = document.getElementsByClassName('cube moving');
@@ -124,13 +125,15 @@ function fallingMovement(board)
 
 
 function createMovingElement(board) {
+    let colors = ["red", "blue", "deepskyblue", "orange", "yellow", "limegreen", "purple"];
+
     const lineElement = function lineElement(board) {
 
         // Creates a new moving element in JS matrix
-        board[0][5] = {color: 'red'};
-        board[1][5] = {color: 'red'};
-        board[2][5] = {color: 'red'};
-        board[3][5] = {color: 'red'};
+        board[0][5] = {color: "deepskyblue"};
+        board[1][5] = {color: "deepskyblue"};
+        board[2][5] = {color: "deepskyblue"};
+        board[3][5] = {color: "deepskyblue"};
         // Places the moving elements into HTML
         let boardElements = [];
         for (let i = 0; i < 4; i++) {
@@ -142,10 +145,10 @@ function createMovingElement(board) {
     };
 
     const cubeElement = function cubeElement(board) {
-        board[0][5] = {color: 'red'};
-        board[1][5] = {color: 'red'};
-        board[0][6] = {color: 'red'};
-        board[1][6] = {color: 'red'};
+        board[0][5] = {color: "yellow"};
+        board[1][5] = {color: "yellow"};
+        board[0][6] = {color: "yellow"};
+        board[1][6] = {color: "yellow"};
         let boardElements = [];
         for (let i = 0; i < 4; i++) {
             boardElements.push(document.querySelector(`[data-row="${i}"][data-col="5"]`));
@@ -158,30 +161,28 @@ function createMovingElement(board) {
     };
 
     const horizontalLine = function horizontalLine(board) {
-        board[0][5] = {color: 'red'};
-        board[0][6] = {color: 'red'};
-        board[0][7] = {color: 'red'};
-        board[0][8] = {color: 'red'};
+        board[0][4] = {color: "deepskyblue"};
+        board[0][5] = {color: "deepskyblue"};
+        board[0][6] = {color: "deepskyblue"};
+        board[0][7] = {color: "deepskyblue"};
+
         let boardElements = [];
+        boardElements.push(document.querySelector(`[data-row="0"][data-col="4"]`));
+        boardElements.push(document.querySelector(`[data-row="0"][data-col="5"]`));
+        boardElements.push(document.querySelector(`[data-row="0"][data-col="6"]`));
+        boardElements.push(document.querySelector(`[data-row="0"][data-col="7"]`));
         for (let i = 0; i < 4; i++) {
-            boardElements.push(document.querySelector(`[data-row="${i}"][data-col="5"]`));
-            boardElements.push(document.querySelector(`[data-row="${i}"][data-col="6"]`));
-            boardElements.push(document.querySelector(`[data-row="${i}"][data-col="7"]`));
-            boardElements.push(document.querySelector(`[data-row="${i}"][data-col="8"]`));
             boardElements[i].style.backgroundColor = board[0][5].color;
-            boardElements[i].style.backgroundColor = board[0][6].color;
-            boardElements[i].style.backgroundColor = board[0][7].color;
-            boardElements[i].style.backgroundColor = board[0][8].color;
             boardElements[i].classList.add('moving');
         }
         return board;
     };
 
     const TElement = function TElement(board) {
-        board[0][4] = {color: 'red'};
-        board[0][5] = {color: 'red'};
-        board[0][6] = {color: 'red'};
-        board[1][5] = {color: 'red'};
+        board[0][4] = {color: "purple"};
+        board[0][5] = {color: "purple"};
+        board[0][6] = {color: "purple"};
+        board[1][5] = {color: "purple"};
 
         let boardElements = [];
         boardElements.push(document.querySelector(`[data-row="0"][data-col="4"]`));
@@ -197,10 +198,10 @@ function createMovingElement(board) {
     };
 
     const SElement1 = function SElement1(board) {
-        board[0][5] = {color: 'red'};
-        board[0][6] = {color: 'red'};
-        board[1][4] = {color: 'red'};
-        board[1][5] = {color: 'red'};
+        board[0][5] = {color: "limegreen"};
+        board[0][6] = {color: "limegreen"};
+        board[1][4] = {color: "limegreen"};
+        board[1][5] = {color: "limegreen"};
 
         let boardElements = [];
         boardElements.push(document.querySelector(`[data-row="0"][data-col="5"]`));
@@ -235,10 +236,10 @@ function createMovingElement(board) {
     };
 
     const LElement1 = function LElement1(board) {
-        board[0][4] = {color: 'red'};
-        board[0][5] = {color: 'red'};
-        board[0][6] = {color: 'red'};
-        board[1][6] = {color: 'red'};
+        board[0][4] = {color: "blue"};
+        board[0][5] = {color: "blue"};
+        board[0][6] = {color: "blue"};
+        board[1][6] = {color: "blue"};
 
         let boardElements = [];
         boardElements.push(document.querySelector(`[data-row="0"][data-col="4"]`));
@@ -253,10 +254,10 @@ function createMovingElement(board) {
     };
 
     const LElement2 = function LElement2(board) {
-        board[0][4] = {color: 'red'};
-        board[0][5] = {color: 'red'};
-        board[0][6] = {color: 'red'};
-        board[1][4] = {color: 'red'};
+        board[0][4] = {color: "orange"};
+        board[0][5] = {color: "orange"};
+        board[0][6] = {color: "orange"};
+        board[1][4] = {color: "orange"};
 
         let boardElements = [];
         boardElements.push(document.querySelector(`[data-row="0"][data-col="4"]`));
@@ -327,7 +328,7 @@ function moveDown(board)
         for (let i = 3; i > -1; i--)
         {
             //Puts the element one place down in the JS matrix
-            board[Number(myElements[i].dataset.row) + 1][Number(myElements[i].dataset.col)] = {color: 'red'};
+            board[Number(myElements[i].dataset.row) + 1][Number(myElements[i].dataset.col)] = {color: myElements[0]['style']['backgroundColor']};
             //Removing the element from it's original position in the JS matrix
             board[Number(myElements[i].dataset.row)][Number(myElements[i].dataset.col)] = 0;
 
@@ -487,15 +488,20 @@ function shifting(event, board)
 
 function checkColumnFill(board)
 {
-    let topRowElements = document.querySelectorAll('[data-row="0"][style="background-color: red;"]');
-    for(element of topRowElements)
+    let colors = ["red", "blue", "deepskyblue", "orange", "yellow", "limegreen", "purple"];
+    let topRowElements = null;
+    for(color of colors)
     {
-        if(!element.classList.contains('moving'))
+        topRowElements = document.querySelectorAll(`[data-row="0"][style="background-color: ${color};"]`);
+        for(element of topRowElements)
         {
-            return true;
+            if(!element.classList.contains('moving'))
+            {
+                return true;
+            }
         }
-
     }
+
 }
 
 
@@ -522,6 +528,7 @@ function checkRowFill(board)
 
 function deleteRow(board, rows)
 {
+    let colors = ["red", "blue", "deepskyblue", "orange", "yellow", "limegreen", "purple"];
     for(row of rows)
     {
         // Delete from matrix.
@@ -539,8 +546,16 @@ function deleteRow(board, rows)
             {
                 continue;
             }
-            let element = document.querySelector(`[data-row="${row}"][data-col='${i}'][style="background-color: red;"]`);
-            element['style']['backgroundColor'] = '';
+            for(color in colors)
+            {
+                let element = document.querySelector(`[data-row="${row}"][data-col='${i}'][style="background-color: ${color};"]`);
+                if(Boolean(element))
+                {
+                    element['style']['backgroundColor'] = '';
+                }
+
+            }
+
         }
     }
     moveRowsDown(board, rows);
